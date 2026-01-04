@@ -1,0 +1,17 @@
+# Visual Studio / IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Environment / Secrets
+.env
+.env.*
+.secrets/
+.secrets.*
+
+# .NET build artifacts
+**/bin/
+**/obj/
+*.deps.json
+*.cache
