@@ -1,11 +1,18 @@
 using Catalog;
 using Catalog.Extensions;
+using Catalog.Infrastructure;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Env.Load("../../../../.env");
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 
-builder.Services.AddApiServices();
+builder.Services
+    .AddApiServices()
+    .AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 
