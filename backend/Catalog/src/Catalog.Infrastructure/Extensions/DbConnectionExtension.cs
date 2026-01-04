@@ -1,15 +1,13 @@
 ﻿using Catalog.Application.Interfaces;
 using Catalog.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Xml.Linq;
 
 namespace Catalog.Infrastructure.Extensions;
 
 public static class DbConnectionExtension
 {
-    public static IServiceCollection AddPostgreSqlConnection(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPostgreSqlConnection(this IServiceCollection services)
     {
         var host = Environment.GetEnvironmentVariable("CATALOG_DB_HOST");
         var port = Environment.GetEnvironmentVariable("CATALOG_DB_PORT");
@@ -25,6 +23,8 @@ public static class DbConnectionExtension
 
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<IApplicationDbContextInitialiser, ApplicationDbContextInitialiser>();
 
         return services;
     }

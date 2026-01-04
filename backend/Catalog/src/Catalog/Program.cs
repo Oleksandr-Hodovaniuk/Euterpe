@@ -12,11 +12,13 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services
     .AddApiServices()
-    .AddInfrastructureServices(builder.Configuration);
+    .AddInfrastructureServices();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+await app.InitialiseDatabaseAsync();
 
 app.UseSwaggerDocumentation(app.Environment);
 
