@@ -1,3 +1,5 @@
+using Catalog.Application.Interfaces;
+using Catalog.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Controllers;
@@ -6,20 +8,20 @@ namespace Catalog.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
+    private readonly IUnitOfWork _unitOfWork;
+
+    public WeatherForecastController(IUnitOfWork unitOfWork)
+    {
+        _unitOfWork = unitOfWork;   
+    }
     private static readonly string[] Summaries =
     [
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     ];
 
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IEnumerable<Track>>  Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        return await _unitOfWork.Tracks.GetAllAsync();
     }
 }

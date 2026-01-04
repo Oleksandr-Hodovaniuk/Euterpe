@@ -12,7 +12,6 @@ internal class ApplicationDbContextInitialiser(ApplicationDbContext _context)
         if (_context.Database.IsNpgsql())
         {
             await _context.Database.MigrateAsync(cancellationToken);
-
         }
     }
 
