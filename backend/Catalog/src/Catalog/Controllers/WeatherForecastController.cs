@@ -1,5 +1,5 @@
 using Catalog.Application.Interfaces;
-using Catalog.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Controllers;
@@ -22,11 +22,15 @@ public class WeatherForecastController : ControllerBase
     [HttpGet]
     public async Task<IActionResult>  Get(CancellationToken cancellationToken)
     {
-        var track = await _unitOfWork.Tracks.GetAsync(t => t.Title == "123123123", cancellationToken: cancellationToken);
-        track.Title = "TEST";
+        var tracks = await _unitOfWork.PlaylistTracks
+            .Query()
+            .OrderBy(pt => pt.AddedAt)
+            .Select(pt => pt.Track)
+            .ToListAsync();
 
-        
+
         await _unitOfWork.SaveAsync(cancellationToken);
-        return Ok();
+
+        return Ok(tracks);
     }
 }
