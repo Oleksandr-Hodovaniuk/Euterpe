@@ -20,62 +20,82 @@ internal class ApplicationDbContextInitialiser(ApplicationDbContext _context)
         if (await _context.Tracks.AnyAsync(cancellationToken))
             return;
 
-        var track1 = new Track
-        {
-            Id = Guid.NewGuid(),
-            KeyCloakUserId = Guid.NewGuid(),
-            Title = "qqqqq",
-            Artist = "jjkhhjh",
-            Duration = 189,
-            Rating = 5,
-            FilePath = "/qew/we/qwe"
-        };
+        var userId = Guid.NewGuid();
 
-        var track2 = new Track
-        {
-            Id = Guid.NewGuid(),
-            KeyCloakUserId = Guid.NewGuid(),
-            Title = "eeeeeeee",
-            Artist = "sadqwedawe",
-            Duration = 289,
-            Rating = 4,
-            FilePath = "/qew/we/qwe"
-        };
+        var plalistId1 = Guid.NewGuid();
+        var plalistId2 = Guid.NewGuid();
 
-        var track3 = new Track
-        {
-            Id = Guid.NewGuid(),
-            KeyCloakUserId = Guid.NewGuid(),
-            Title = "ssssss",
-            Artist = "jiojiouyh",
-            Duration = 350,
-            Rating = 3,
-            FilePath = "/qew/we/qwe"
-        };
+        var trackId1 = Guid.NewGuid();
+        var trackId2 = Guid.NewGuid();
+        var trackId3 = Guid.NewGuid();
 
-        var track4 = new Track
-        {
-            Id = Guid.NewGuid(),
-            KeyCloakUserId = Guid.NewGuid(),
-            Title = "ffffff",
-            Artist = "ujytfrtr",
-            Duration = 234,
-            Rating = 2,
-            FilePath = "/qew/we/qwe"
-        };
+        _context.Playlists.AddRange(
+            new Playlist {
+                Id = plalistId1,
+                KeyCloakUserId = userId,
+                Title = "Rock",
+                Count = 2
+            },
+            new Playlist
+            {
+                Id = plalistId2,
+                KeyCloakUserId = userId,
+                Title = "Chill",
+                Count = 1
+            }
+        );
 
-        var track5 = new Track
-        {
-            Id = Guid.NewGuid(),
-            KeyCloakUserId = Guid.NewGuid(),
-            Title = "ttttttt",
-            Artist = "eqwgtrgyrt",
-            Duration = 322,
-            Rating = 5,
-            FilePath = "/qew/we/qwe"
-        };
+        _context.Tracks.AddRange(
+            new Track {
+                Id = trackId1,
+                KeyCloakUserId = userId,
+                Title = "Iron beast",
+                Artist = "Winter woolfs",
+                Duration = 220,
+                Rating = 4,
+                FileKey = "/tracks/"
+            },
+            new Track
+            {
+                Id = trackId2,
+                KeyCloakUserId = userId,
+                Title = "WW3",
+                Artist = "RadioRoaches",
+                Duration = 267,
+                Rating = 5,
+                FileKey = "/tracks/"
+            },
+            new Track
+            {
+                Id = trackId3,
+                KeyCloakUserId = userId,
+                Title = "Just a guy",
+                Artist = "Sweet Day",
+                Duration = 293,
+                Rating = 3,
+                FileKey = "/tracks/"
+            }
+        );
 
-        await _context.Tracks.AddRangeAsync(track1, track2, track2, track3, track4, track5);
+        //await _context.SaveChangesAsync(cancellationToken);
+
+        _context.PlaylistTracks.AddRange(
+            new PlaylistTrack {
+                PlaylistId = plalistId1,
+                TrackId = trackId1
+            },
+            new PlaylistTrack
+            {
+                PlaylistId = plalistId1,
+                TrackId = trackId2
+            },
+            new PlaylistTrack
+            {
+                PlaylistId = plalistId2,
+                TrackId = trackId3
+            }
+        );
+
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

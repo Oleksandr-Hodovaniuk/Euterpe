@@ -11,7 +11,9 @@ internal class ApplicationDbContext(DbContextOptions<ApplicationDbContext> optio
     : DbContext(options),
     IApplicationDbContext
 {
+    public DbSet<Playlist> Playlists => Set<Playlist>();
     public DbSet<Track> Tracks => Set<Track>();
+    public DbSet<PlaylistTrack> PlaylistTracks => Set<PlaylistTrack>();
     public override DatabaseFacade Database => base.Database;
 
     public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)

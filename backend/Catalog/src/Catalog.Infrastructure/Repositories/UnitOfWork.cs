@@ -7,8 +7,14 @@ namespace Catalog.Infrastructure.Repositories;
 
 internal class UnitOfWork(ApplicationDbContext _context) : IUnitOfWork
 {
+    private IRepository<Playlist>? _playlists;
+    public IRepository<Playlist> Playlists => _playlists ??= new Repository<Playlist>(_context);
+
     private IRepository<Track>? _tracks;
     public IRepository<Track> Tracks => _tracks ??= new Repository<Track>(_context);
+
+    private IRepository<PlaylistTrack>? _playlistTracks;
+    public IRepository<PlaylistTrack> PlaylistTracks => _playlistTracks ??= new Repository<PlaylistTrack>(_context);
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
     {

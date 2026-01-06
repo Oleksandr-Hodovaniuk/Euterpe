@@ -20,8 +20,13 @@ public class WeatherForecastController : ControllerBase
     ];
 
     [HttpGet]
-    public async Task<IEnumerable<Track>>  Get()
+    public async Task<IActionResult>  Get(CancellationToken cancellationToken)
     {
-        return await _unitOfWork.Tracks.GetAllAsync();
+        var track = await _unitOfWork.Tracks.GetAsync(t => t.Title == "123123123", cancellationToken: cancellationToken);
+        track.Title = "TEST";
+
+        
+        await _unitOfWork.SaveAsync(cancellationToken);
+        return Ok();
     }
 }
