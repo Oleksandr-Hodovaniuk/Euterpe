@@ -77,8 +77,6 @@ internal class ApplicationDbContextInitialiser(ApplicationDbContext _context)
             }
         );
 
-        //await _context.SaveChangesAsync(cancellationToken);
-
         _context.PlaylistTracks.AddRange(
             new PlaylistTrack {
                 PlaylistId = plalistId1,
