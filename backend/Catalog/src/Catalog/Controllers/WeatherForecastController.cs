@@ -1,6 +1,9 @@
 using Catalog.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Catalog.Application.Tracks.Dtos;
+using Catalog.Application.Playlists.Dtos;
 
 namespace Catalog.Controllers;
 
@@ -9,28 +12,22 @@ namespace Catalog.Controllers;
 public class WeatherForecastController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
-
-    public WeatherForecastController(IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper;
+    public WeatherForecastController(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _unitOfWork = unitOfWork;   
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
-    private static readonly string[] Summaries =
-    [
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    ];
 
     [HttpGet]
     public async Task<IActionResult>  Get(CancellationToken cancellationToken)
     {
-        var tracks = await _unitOfWork.PlaylistTracks
-            .Query()
-            .OrderBy(pt => pt.AddedAt)
-            .Select(pt => pt.Track)
-            .ToListAsync();
+        var tracks = await _unitOfWork.Playlists.Query().Include(p => p.PlaylistTracks).ThenInclude(pl => pl.Track).ToListAsync();
 
+        var result = _mapper.Map<List<PlaylistDto>>(tracks);
 
         await _unitOfWork.SaveAsync(cancellationToken);
 
-        return Ok(tracks);
+        return Ok(result);
     }
 }

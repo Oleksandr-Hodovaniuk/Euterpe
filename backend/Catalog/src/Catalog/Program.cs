@@ -1,6 +1,7 @@
 using Catalog;
 using Catalog.Extensions;
 using Catalog.Infrastructure;
+using Catalog.Application;
 using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,8 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services
     .AddApiServices()
-    .AddInfrastructureServices();
+    .AddInfrastructureServices()
+    .AddApplicationServices();
 
 var app = builder.Build();
 
